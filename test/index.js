@@ -30,4 +30,10 @@ function test() {
   });
   eventTarget.addEventListener('foo', () => console.log(2));
   eventTarget.dispatchEvent(new Event('foo'));
+  eventTarget._on('foo', () => console.log(3));
+  eventTarget.dispatchEvent(new Event('foo'));
+  eventTarget._on('foo', () => console.log(4));
+  eventTarget.dispatchEvent(new Event('foo'));
+  eventTarget._on('foo', null);
+  eventTarget.dispatchEvent(new Event('foo'));
 }
