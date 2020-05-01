@@ -8,11 +8,9 @@ try {
     var defineProperty = Object.defineProperty;
     var proto = EventTarget.prototype;
     define(proto, 'addEventListener', function (type, listener, options) {
-      for (var
-        secret = wm.get(this),
-        listeners = secret[type] || (secret[type] = []),
-        i = 0, length = listeners.length; i < length; i++
-      ) {
+      var secret = wm.get(this);
+      var listeners = secret[type] || (secret[type] = []);
+      for (var i = 0, length = listeners.length; i < length; i++) {
         if (listeners[i].listener === listener)
           return;
       }
@@ -31,11 +29,9 @@ try {
       return true;
     });
     define(proto, 'removeEventListener', function (type, listener) {
-      for (var
-        secret = wm.get(this),
-        listeners = secret[type] || (secret[type] = []),
-        i = 0, length = listeners.length; i < length; i++
-      ) {
+      var secret = wm.get(this);
+      var listeners = secret[type] || (secret[type] = []);
+      for (var i = 0, length = listeners.length; i < length; i++) {
         if (listeners[i].listener === listener) {
           listeners.splice(i, 1);
           return;
