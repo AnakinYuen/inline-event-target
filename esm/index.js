@@ -7,35 +7,61 @@ try {
     var create = Object.create;
     var defineProperty = Object.defineProperty;
     var proto = EventTarget.prototype;
+    function getListenerObj(secret, type) {
+      if (!secret[type]) {
+        secret[type] = {
+          inline: null,
+          list: [],
+        };
+      }
+      return secret[type];
+    }
     define(proto, 'addEventListener', function (type, listener, options) {
-      for (var
-        secret = wm.get(this),
-        listeners = secret[type] || (secret[type] = []),
-        i = 0, length = listeners.length; i < length; i++
-      ) {
+      var secret = wm.get(this);
+      var listeners = getListenerObj(secret, type).list;
+      for (var i = 0, length = listeners.length; i < length; i++) {
         if (listeners[i].listener === listener)
           return;
       }
       listeners.push({target: this, listener: listener, options: options});
     });
+    define(proto, '_on', function (type, listener) {
+      var secret = wm.get(this);
+      var listenerObj = getListenerObj(secret, type);
+      var listeners = listenerObj.list;
+      var lastInline = listenerObj.inline;
+      listenerObj.inline = listener;
+      if (listener == null) {
+        this.removeEventListener(type, lastInline);
+        return;
+      }
+      for (var i = 0, length = listeners.length; i < length; i++) {
+        if (listeners[i].listener === lastInline) {
+          listeners[i].listener = listener;
+          return;
+        }
+      }
+      listeners.push({target: this, listener: listener});
+    });
     define(proto, 'dispatchEvent', function (event) {
       var secret = wm.get(this);
-      var listeners = secret[event.type];
-      if (listeners) {
-        define(event, 'target', this);
-        define(event, 'currentTarget', this);
-        listeners.slice(0).forEach(dispatch, event);
-        delete event.currentTarget;
-        delete event.target;
+      var listenerObj = secret[event.type];
+      if (listenerObj) {
+        var listeners = listenerObj.list;
+        if (listeners) {
+          define(event, 'target', this);
+          define(event, 'currentTarget', this);
+          listeners.slice(0).forEach(dispatch, event);
+          delete event.currentTarget;
+          delete event.target;
+        }
       }
       return true;
     });
     define(proto, 'removeEventListener', function (type, listener) {
-      for (var
-        secret = wm.get(this),
-        listeners = secret[type] || (secret[type] = []),
-        i = 0, length = listeners.length; i < length; i++
-      ) {
+      var secret = wm.get(this);
+      var listeners = getListenerObj(secret, type).list;
+      for (var i = 0, length = listeners.length; i < length; i++) {
         if (listeners[i].listener === listener) {
           listeners.splice(i, 1);
           return;
