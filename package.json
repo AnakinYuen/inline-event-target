@@ -1,7 +1,7 @@
 {
-  "name": "@ungap/event-target",
-  "version": "0.1.0",
-  "description": "An EventTarget polyfill",
+  "name": "@anakinyuen/inline-event-target",
+  "version": "0.2.0",
+  "description": "An EventTarget polyfill with onevent supported",
   "main": "cjs/index.js",
   "module": "esm/index.js",
   "unpkg": "min.js",
@@ -17,9 +17,10 @@
   "keywords": [
     "EventTarget",
     "polyfill",
-    "ungap"
+    "ungap",
+    "onevent"
   ],
-  "author": "Andrea Giammarchi",
+  "author": "Anakin Yuen",
   "license": "ISC",
   "devDependencies": {
     "coveralls": "^3.0.2",
@@ -28,10 +29,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ungap/event-target.git"
+    "url": "git+https://github.com/AnakinYuen/inline-event-target.git"
   },
   "bugs": {
-    "url": "https://github.com/ungap/event-target/issues"
+    "url": "https://github.com/AnakinYuen/inline-event-target/issues"
   },
-  "homepage": "https://github.com/ungap/event-target#readme"
+  "homepage": "https://github.com/AnakinYuen/inline-event-target#readme"
 }
